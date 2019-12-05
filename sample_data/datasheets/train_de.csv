@@ -1,3 +1,3 @@
 root,filename,area,gradability
-./sample_data/dataset/gradable_denoised,GRADABLE_a_de.img,Optic Disc,G
-./sample_data/dataset/ungradable_denoised,UNGRADABLE_a_de.img,Optic Disc,U
+./sample_data/dataset/gradable_denoised,GRADABLE_a_de.img,Optic Disc Cube 200x200,G
+./sample_data/dataset/ungradable_denoised,UNGRADABLE_a_de.img,Optic Disc Cube 200x200,U

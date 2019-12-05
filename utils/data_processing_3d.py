@@ -4,6 +4,7 @@ from scipy.ndimage import (
     zoom
 )
 import numpy as np
+import cv2
 
 
 class DataProcessing3D():

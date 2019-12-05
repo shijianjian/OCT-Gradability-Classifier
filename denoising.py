@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 import os
 
 from utils.data_processing_3d import DataProcessing3D
@@ -30,10 +29,11 @@ def processing(src_name, dst_name, shape, progress=None, suffix='de', techs=['de
     dst_name = dst_name[:dst_name.rindex('.')] + '_' + suffix + dst_name[dst_name.rindex('.'):]
     if 'denoise' in techs:
         if os.path.isfile(dst_name):
-            # print('Exists, skipping', dst_name)
+            print('Exists, skipping', dst_name)
             return
         else:
-            img = DataProcessing3D(img).nl_denoise_3d().image
+            processor = DataProcessing3D().load_image(img)
+            img = processor.nl_denoise_3d().image
             res = {'src': src_name, "dst": dst_name, "img": img}
             if not os.path.isdir(dst_name[:dst_name.rindex(os.path.sep)]):
                 os.makedirs(dst_name[:dst_name.rindex(os.path.sep)])
@@ -55,9 +55,11 @@ if __name__ == '__main__':
         for idx, row in csv.iterrows():
             if not row['filename'].endswith('.img'):
                 raise ValueError("Invalid file extension at %d as `%s`" % (idx, row['filename'][row['filename'].rindex('.'):]))
-            if 'Optic Disc' == row['area']:
+            if 'Optic Disc Cube 200x200' == row['area']:
                 shape = (200, 1024, 200)
-            elif 'Macular' == row['area']:
+            elif 'Macular Cube 200x200' == row['area']:
+                shape = (200, 1024, 200)
+            elif 'Macular Cube 512x128' == row['area']:
                 shape = (128, 1024, 512)
             else:
                 raise ValueError("Invalid area found at %d as `%s`" % (idx, row['area']))
