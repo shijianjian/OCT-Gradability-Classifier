@@ -1,0 +1,3 @@
+root,filename,area,gradability
+./sample_data/dataset/gradable_denoised,GRADABLE_a_de.img,Optic Disc,UNKNOWN
+./sample_data/dataset/ungradable_denoised,UNGRADABLE_a_de.img,Optic Disc,UNKNOWN
