@@ -34,7 +34,6 @@ Code repository for paper [Artificial intelligence deep learning algorithm for d
         ```
         $ python index.py --predict --denoise --folder="./trained_model"
         ```
-<<<<<<< HEAD:READEME.md
        Remove the ```denoise``` flag to run on denoised data for saving time:
         ```
         $ python index.py --predict --folder="./trained_model"
@@ -44,6 +43,3 @@ Code repository for paper [Artificial intelligence deep learning algorithm for d
     ```
     $ python GradCAM.py --file="./predict_confidence.csv" --folder="./trained_model"
     ```
-=======
-        Note: the uploaded trained model was trained using 4 gpus and was saved as a ```multi_gpu_model``` from tensorflow keras.
->>>>>>> c2b49c26853181eb118f48c2afb49af40195ec31:README.md
