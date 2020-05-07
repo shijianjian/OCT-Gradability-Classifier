@@ -43,3 +43,18 @@ Code repository for paper [Artificial intelligence deep learning algorithm for d
     ```
     $ python GradCAM.py --file="./predict_confidence.csv" --folder="./trained_model"
     ```
+
+
+If you think this work is useful, please cite:
+```
+@article{ran2019artificial,
+  title={Artificial intelligence deep learning algorithm for discriminating ungradable optical coherence tomography three-dimensional volumetric optic disc scans},
+  author={Ran, An Ran and Shi, Jian and Ngai, Amanda K and Chan, Wai-Yin and Chan, Poemen P and Young, Alvin L and Yung, Hon-Wah and Tham, Clement C and Cheung, Carol Y},
+  journal={Neurophotonics},
+  volume={6},
+  number={4},
+  pages={041110},
+  year={2019},
+  publisher={International Society for Optics and Photonics}
+}
+```
