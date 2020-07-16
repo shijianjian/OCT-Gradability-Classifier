@@ -16,7 +16,9 @@ class DataProcessing3D():
     def load_image(self, image):
         """ Takes image shape (Depth, Width, Height, Channels)
         """
-        self.image = np.array(image)
+        assert image.shape[-1] == 1, "channel must == 1"
+        assert len(image.shape) == 4, "must be DHWC"
+        self.image = np.array(image[..., 0])
         self.applied = []
         return self
 
@@ -176,3 +178,6 @@ class DataProcessing3D():
         self.image = _f(self.image)
 
         return self
+
+    def get_image(self):
+        return np.expand_dims(self.image, -1)

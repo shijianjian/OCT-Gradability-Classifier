@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     def image_preprocess_fn(img):
         if args.denoise:
-            img = DataProcessing3D(img).nl_denoise_3d().image
+            img = DataProcessing3D().load_image(img).nl_denoise_3d().get_image()
         return img[:, :, :, :]
     num_outputs = 2
 
@@ -186,12 +186,12 @@ if __name__ == '__main__':
         predict_sequence = PredictSequence(
             dataframe=df,
             batch_size=1,
-            shuffle=False,
             image_preprocess_fn=image_preprocess_fn,
             target_shape=(200, 1024, 200, 1),
             input_shape=(200, 1024, 200, 1)
         )
-        pred = model.predict_generator(predict_sequence, verbose=1, max_queue_size=0)
+        pred = model.predict_generator(
+            predict_sequence, verbose=1, max_queue_size=38, workers=38, use_multiprocessing=True)
         predict_sequence.dataframe['pred_g'] = pred[:, 0]
         predict_sequence.dataframe['pred_u'] = pred[:, 1]
         predict_sequence.dataframe.to_csv('./predict_confidence.csv', index=None)

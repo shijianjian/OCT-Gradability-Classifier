@@ -36,6 +36,7 @@ class DataSequence3D(Sequence):
 
         self.image_processor = DataProcessing3D()
         self.reshuffle_and_choose()
+        print(self.labelnames)
 
     def reshuffle_and_choose(self):
         if self.choose_only is not None:
@@ -104,7 +105,7 @@ class DataSequence3D(Sequence):
             else:
                 data = data.normalize()
 
-            batch_features[i] = data.image
+            batch_features[i] = data.get_image()
         return np.array(batch_features)
 
     def _one_hot(self, labels):
@@ -175,7 +176,7 @@ class TrainingSequence(DataSequence3D):
 
         super().__init__(dataframe=dataframe, labelnames=labelnames, batch_size=batch_size, choose_only=choose_only, augment_fn=self._augment_fn,
                          shuffle=shuffle, resize=resize, image_preprocess_fn=image_preprocess_fn, target_shape=target_shape, input_shape=input_shape)
-        print(self.labelnames)
+
         if self.data_balancing:
             self._balance()
 
@@ -251,7 +252,6 @@ class TestingSequence(DataSequence3D):
                 dataframe = pd.concat(dfs).reset_index(drop=True)
 
         labelnames = sorted(dataframe[LABEL_COLUMN].unique())
-        print(labelnames)
         super().__init__(dataframe=dataframe, labelnames=labelnames, batch_size=batch_size, choose_only=choose_only, augment_fn=None,
                          shuffle=shuffle, image_preprocess_fn=image_preprocess_fn, target_shape=target_shape, input_shape=input_shape)
 
@@ -276,7 +276,7 @@ class PredictSequence(DataSequence3D):
     target_shape: shape-like array. The shape of input for your model.
     input_shape: shape-like array. The shape of original data.
     """
-    def __init__(self, csv_paths=None, data_path=None, dataframe=None, batch_size=1, resize=None, shuffle=False, image_preprocess_fn=None, target_shape=(200, 1024, 200, 1), input_shape=(200, 1024, 200, 1)):
+    def __init__(self, csv_paths=None, data_path=None, dataframe=None, batch_size=1, resize=None, image_preprocess_fn=None, target_shape=(200, 1024, 200, 1), input_shape=(200, 1024, 200, 1)):
         if data_path is not None and dataframe is not None:
             raise ValueError('data_path, dataframe values cannot coexist.')
         if data_path is None and dataframe is None:
@@ -296,11 +296,16 @@ class PredictSequence(DataSequence3D):
                 NAME_COLUMN: [p for p in os.listdir(data_path)],
                 LABEL_COLUMN: [np.nan for p in os.listdir(data_path)]
             })
+        # Label column should not be required.
+        if LABEL_COLUMN in dataframe.columns:
+            dataframe[LABEL_COLUMN] = dataframe[LABEL_COLUMN].astype(str)
+        else:
+            dataframe[LABEL_COLUMN] = np.nan
         labelnames = sorted(dataframe[LABEL_COLUMN].unique())
         self._ground_truth = []
         self.ground_truth = []
         super().__init__(dataframe=dataframe, labelnames=labelnames, batch_size=batch_size, choose_only=None, augment_fn=None,
-                         shuffle=shuffle, image_preprocess_fn=image_preprocess_fn, target_shape=target_shape, input_shape=input_shape)
+                         shuffle=False, image_preprocess_fn=image_preprocess_fn, target_shape=target_shape, input_shape=input_shape)
 
     def __getitem__(self, idx):
         batch_files, gt = super()._get_raw_batch(idx)
